@@ -1,0 +1,32 @@
+gcloud config set compute/zone us-east1-d
+
+cloud src repo
+https://source.developers.google.com/p/$DEVSHELL_PROJECT_ID/r/sample-app
+
+cd continuous-deployment-on-kubernetes
+
+gcloud container clusters list
+
+gcloud container clusters get-credentials jenkins-cd
+
+kubectl cluster-info
+
+helm repo add jenkins https://charts.jenkins.io
+
+helm repo update
+
+config jenkins
+
+kubectl get pods
+
+kubectl create clusterrolebinding jenkins-deploy --clusterrole=cluster-admin --serviceaccount=default:cd-jenkins
+
+export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/component=jenkins-master" -l "app.kubernetes.io/instance=cd" -o jsonpath="{.items[0].metadata.name}")
+kubectl port-forward $POD_NAME 8080:8080 >> /dev/null &
+
+kubectl get svc
+
+printf $(kubectl get secret cd-jenkins -o jsonpath="{.data.jenkins-admin-password}" | base64 --decode);echo
+
+cd sample-app
+
