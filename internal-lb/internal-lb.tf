@@ -144,7 +144,6 @@ resource "google_compute_firewall" "fw-ilb-to-backends" {
 # test instance
 resource "google_compute_instance" "vm-test" {
   name         = "l7-ilb-test-vm"
-  #provider     = google-beta
   zone         = "europe-west1-b"
   machine_type = "e2-small"
   network_interface {
